@@ -1,0 +1,22 @@
+h1{
+    font-size: 36px;
+    color: orange;
+    text-align: center;
+}
+body{
+    background-color: black;
+    color: aqua;
+}
+h2{
+    color: navajowhite;
+    text-decoration: underline;
+    font-style: italic;
+    font-weight: bold;
+}
+p{
+    font-size: 25px;
+}
+#weirdness{
+    color:blueviolet;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+}

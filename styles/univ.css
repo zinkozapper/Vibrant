@@ -1,0 +1,58 @@
+/* Custom background color or image */
+body {
+    /* Using a background image for a dynamic look. Replace 'circuit_bg.jpg' with your file. */
+    background-image: url('../images/circuit_bg.png'); 
+    background-size: cover;
+    background-attachment: fixed; /* Makes the background stay put when scrolling */
+    background-color: #0b0c10; /* Fallback color in case the image fails */
+    margin: 0;
+    padding: 0;
+    /* Font family definition */
+    font-family: 'Consolas', monospace; /* A tech-focused, monospaced font family */
+    /* Font color definition (light text on dark background) */
+    color: #c5c6c7; 
+    line-height: 1.6;
+}
+
+/* Div 2: Main Content Block */
+.main-content {
+    background-color: rgba(19, 23, 29, 0.95); /* Slightly darker, almost opaque */
+    width: 80%;
+    max-width: 1100px;
+    margin: 30px auto; /* Centers the div horizontally */
+    padding: 20px 40px;
+    border-radius: 8px;
+    box-shadow: 0 0 20px rgba(102, 252, 241, 0.2);
+}
+
+.main-content h2 {
+    /* Another font color definition */
+    color: #45a29e; 
+    border-bottom: 1px dashed #45a29e;
+    padding-bottom: 5px;
+}
+
+/* Styling for the nested list */
+.challenge-categories {
+    padding-left: 20px;
+}
+
+.challenge-categories li {
+    margin-bottom: 10px;
+}
+
+.challenge-categories ul {
+    list-style-type: square;
+    margin-top: 5px;
+}
+
+/* Image styling */
+.ctf-image {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 15px 0;
+    border: 5px solid #1f2833;
+    border-radius: 4px;
+}
+

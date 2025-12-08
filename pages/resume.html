@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume - Daniel Walker</title>
+    <link rel="stylesheet" href="../styles/resume.css"> </head>
+<body>
+
+    <div class="header-nav">
+        <h1>Daniel Walker</h1>
+        <p>Software Developer | Systems Architect | Tech Enthusiast</p>
+        <nav>
+            <a href="#about">About</a>
+            <a href="#experience">Experience</a>
+            <a href="#education">Education</a>
+            <a href="#projects">Projects</a>
+        </nav>
+    </div>
+
+    <div class="main-content">
+
+        <section class="dropdown-section" id="about">
+            <input type="checkbox" id="toggle-about" class="dropdown-toggle" hidden>
+            <label for="toggle-about" class="dropdown-label">
+                <h2>[ >> ] 👤 About Me</h2>
+            </label>
+            <div class="dropdown-content">
+                <p>A highly motivated software developer with 5+ years of experience building scalable applications. Focused on backend systems and clean, maintainable code.</p>
+                
+                <section class="submenu-section">
+                    <input type="checkbox" id="toggle-skills" class="dropdown-toggle" hidden>
+                    <label for="toggle-skills" class="submenu-label">
+                        <h3>[ + ] Technical Skills</h3>
+                    </label>
+                    <div class="submenu-content">
+                        <ul>
+                            <li><strong>Languages:</strong> Python, Java, C++, Go, HTML/CSS</li>
+                            <li><strong>Frameworks:</strong> Django, Spring Boot, React</li>
+                            <li><strong>Databases:</strong> PostgreSQL, MongoDB, Redis</li>
+                        </ul>
+                    </div>
+                </section>
+                
+                <section class="submenu-section">
+                    <input type="checkbox" id="toggle-contact" class="dropdown-toggle" hidden>
+                    <label for="toggle-contact" class="submenu-label">
+                        <h3>[ + ] Contact Information</h3>
+                    </label>
+                    <div class="submenu-content">
+                        <p>Email: <a href="mailto:you@example.com">you@example.com</a></p>
+                        <p>LinkedIn: <a href="https://linkedin.com/in/yourprofile" target="_blank">/in/yourprofile</a></p>
+                        <p>GitHub: <a href="https://github.com/yourusername" target="_blank">/yourusername</a></p>
+                    </div>
+                </section>
+
+            </div>
+        </section>
+        
+        <hr>
+
+        <section class="dropdown-section" id="experience">
+            <input type="checkbox" id="toggle-experience" class="dropdown-toggle" hidden>
+            <label for="toggle-experience" class="dropdown-label">
+                <h2>[ >> ] 💼 Professional Experience</h2>
+            </label>
+            <div class="dropdown-content">
+                
+                <article>
+                    <h3>Senior Software Engineer | TechCorp Innovations</h3>
+                    <p class="meta">Jan 2022 - Present | City, State</p>
+                    <ul>
+                        <li>Led a team of 4 to refactor a legacy monolithic service into microservices, reducing latency by **30%**.</li>
+                        <li>Designed and implemented a new caching layer using Redis, handling **1 million** requests per minute.</li>
+                    </ul>
+                </article>
+                
+                <section class="submenu-section">
+                    <input type="checkbox" id="toggle-exp-proj" class="dropdown-toggle" hidden>
+                    <label for="toggle-exp-proj" class="submenu-label">
+                        <h3>[ + ] Key Projects at TechCorp</h3>
+                    </label>
+                    <div class="submenu-content">
+                        <p><strong>Project A:</strong> Developed a real-time data ingestion pipeline using Kafka.</p>
+                        <p><strong>Project B:</strong> Managed the deployment pipeline using Jenkins and Kubernetes.</p>
+                    </div>
+                </section>
+
+            </div>
+        </section>
+
+        <hr>
+
+        <section class="dropdown-section" id="education">
+            <input type="checkbox" id="toggle-education" class="dropdown-toggle" hidden>
+            <label for="toggle-education" class="dropdown-label">
+                <h2>[ >> ] 🎓 Education</h2>
+            </label>
+            <div class="dropdown-content">
+
+                <article>
+                    <h3>Master of Science in Computer Science</h3>
+                    <p class="meta">University Name | 2020</p>
+                    <p>Relevant Coursework: Advanced Algorithms, Distributed Systems, Machine Learning.</p>
+                </article>
+
+                <section class="submenu-section">
+                    <input type="checkbox" id="toggle-awards" class="dropdown-toggle" hidden>
+                    <label for="toggle-awards" class="submenu-label">
+                        <h3>[ + ] Honors and Awards</h3>
+                    </label>
+                    <div class="submenu-content">
+                        <ul>
+                            <li>Dean's List: All Semesters</li>
+                            <li>Graduate Research Fellowship: 2019-2020</li>
+                        </ul>
+                    </div>
+                </section>
+
+            </div>
+        </section>
+        
+        <hr>
+
+        <section class="dropdown-section" id="projects">
+            <input type="checkbox" id="toggle-projects" class="dropdown-toggle" hidden>
+            <label for="toggle-projects" class="dropdown-label">
+                <h2>[ >> ] ⚙️ Personal Projects</h2>
+            </label>
+            <div class="dropdown-content">
+                
+                <article>
+                    <h3>Open Source AI Chatbot</h3>
+                    <p class="meta">Technology: Python, TensorFlow, Flask</p>
+                    <p>A conversational AI trained on a custom dataset. Deployed using Docker for easy setup.</p>
+                    <p><a href="#" target="_blank">View on GitHub</a></p>
+                </article>
+
+                <section class="submenu-section">
+                    <input type="checkbox" id="toggle-future" class="dropdown-toggle" hidden>
+                    <label for="toggle-future" class="submenu-label">
+                        <h3>[ + ] Future Enhancements</h3>
+                    </label>
+                    <div class="submenu-content">
+                        <p>Planning to integrate sentiment analysis and multi-lingual support.</p>
+                    </div>
+                </section>
+
+            </div>
+        </section>
+
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,193 @@
+/* --- Base Theme Styles (Provided by User) --- */
+
+/* Custom background color or image */
+body {
+    /* Using a background image for a dynamic look. Replace 'circuit_bg.png' with your file. */
+    background-image: url('../images/circuit_bg.png'); 
+    background-size: cover;
+    background-attachment: fixed; /* Makes the background stay put when scrolling */
+    background-color: #0b0c10; /* Fallback color in case the image fails */
+    margin: 0;
+    padding: 0;
+    /* Font family definition */
+    font-family: 'Consolas', monospace; /* A tech-focused, monospaced font family */
+    /* Font color definition (light text on dark background) */
+    color: #c5c6c7; 
+    line-height: 1.6;
+}
+
+/* Div 1: Header and Navigation Block */
+.header-nav {
+    background-color: rgba(31, 40, 51, 0.9); /* Semi-transparent dark background */
+    padding: 20px;
+    border-bottom: 3px solid #66fcf1; /* A contrasting accent color */
+    text-align: center;
+}
+
+.header-nav h1 {
+    /* Another font color definition */
+    color: #45a29e; 
+    margin-bottom: 10px;
+}
+
+.header-nav a {
+    color: #66fcf1;
+    text-decoration: none;
+    margin: 0 10px;
+    padding: 5px;
+    border: 1px solid transparent;
+    transition: all 0.3s ease;
+}
+
+.header-nav a:hover {
+    color: #c5c6c7;
+    border-color: #66fcf1;
+}
+
+/* Div 2: Main Content Block */
+.main-content {
+    background-color: rgba(19, 23, 29, 0.95); /* Slightly darker, almost opaque */
+    width: 80%;
+    max-width: 1100px;
+    margin: 30px auto; /* Centers the div horizontally */
+    padding: 20px 40px;
+    border-radius: 8px;
+    box-shadow: 0 0 20px rgba(102, 252, 241, 0.2);
+}
+
+/* General Content Styling */
+hr {
+    border: none;
+    border-top: 1px dashed #45a29e;
+    margin: 30px 0;
+}
+
+a {
+    color: #66fcf1;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+article {
+    margin-bottom: 20px;
+    padding-left: 15px;
+    border-left: 3px solid #45a29e;
+}
+
+article h3 {
+    margin-top: 0;
+    color: #c5c6c7;
+}
+
+.meta {
+    font-size: 0.9em;
+    color: #45a29e;
+    font-style: italic;
+    margin-top: -10px;
+    margin-bottom: 15px;
+}
+
+/* --- Pure CSS Dropdown Logic --- */
+
+/* Main Dropdown Styling */
+.dropdown-section {
+    margin-bottom: 15px;
+}
+
+/* The label acts as the clickable header */
+.dropdown-label {
+    display: block;
+    cursor: pointer;
+    background-color: #1f2833; /* Slightly lighter background for the header */
+    padding: 15px;
+    border-radius: 4px;
+    border-left: 5px solid #66fcf1;
+    transition: background-color 0.3s ease;
+}
+
+.dropdown-label:hover {
+    background-color: #2c3440;
+}
+
+.dropdown-label h2 {
+    color: #66fcf1;
+    margin: 0;
+    font-size: 1.5em;
+    /* Hide the initial placeholder text like [ >> ] */
+}
+
+/* The content div is the one that opens/closes */
+.dropdown-content {
+    /* Initially hide the content */
+    max-height: 0;
+    overflow: hidden;
+    padding: 0 15px;
+    background-color: #161e27; /* Content background */
+    transition: max-height 0.5s ease-out, padding 0.5s ease-out;
+}
+
+/* Show content when the checkbox is checked (pure CSS magic) */
+.dropdown-toggle:checked + .dropdown-label + .dropdown-content {
+    /* Set a large enough max-height to display the full content */
+    max-height: 1000px; /* Adjust as needed for very long content */
+    padding: 20px 15px;
+    border: 1px solid #1f2833;
+    border-top: none;
+    border-radius: 0 0 4px 4px;
+}
+
+/* Update the arrow indicator on the label */
+.dropdown-toggle:checked + .dropdown-label h2 {
+    /* Change the indicator from [ >> ] to [ \/ ] or similar */
+    content: '[ \/ ]';
+}
+/* You need to manually update the content in the HTML, or use CSS content property on a pseudo-element
+   For simplicity, we'll rely on the visual change from the open/closed state */
+
+
+/* --- Submenu Dropdown Logic (Nested) --- */
+
+.submenu-section {
+    margin-top: 15px;
+    padding-left: 15px;
+}
+
+.submenu-label {
+    display: block;
+    cursor: pointer;
+    background-color: #2c3440; /* Slightly different background for submenus */
+    padding: 10px;
+    border-radius: 4px;
+    border-left: 3px solid #45a29e; /* Accent color for submenus */
+    transition: background-color 0.3s ease;
+}
+
+.submenu-label:hover {
+    background-color: #3f4a59;
+}
+
+.submenu-label h3 {
+    color: #45a29e;
+    margin: 0;
+}
+
+.submenu-content {
+    /* Initially hide the submenu content */
+    max-height: 0;
+    overflow: hidden;
+    padding: 0 10px;
+    background-color: #1f2833; 
+    transition: max-height 0.4s ease-in, padding 0.4s ease-in;
+    border-radius: 0 0 4px 4px;
+}
+
+/* Show submenu content when its checkbox is checked */
+.dropdown-toggle:checked + .submenu-label + .submenu-content {
+    max-height: 500px; /* Adjust as needed */
+    padding: 15px 10px;
+    border: 1px solid #2c3440;
+    border-top: none;
+}

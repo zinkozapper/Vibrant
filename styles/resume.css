@@ -126,7 +126,7 @@ article h3 {
     overflow: hidden;
     padding: 0 15px;
     background-color: #161e27; /* Content background */
-    transition: max-height 0.5s ease-out, padding 0.5s ease-out;
+    transition: max-height 0.3s ease-out, padding 0.3s ease-out;
 }
 
 /* Show content when the checkbox is checked (pure CSS magic) */
@@ -180,7 +180,7 @@ article h3 {
     overflow: hidden;
     padding: 0 10px;
     background-color: #1f2833; 
-    transition: max-height 0.4s ease-in, padding 0.4s ease-in;
+    transition: max-height 0.3s ease-in, padding 0.3s ease-in;
     border-radius: 0 0 4px 4px;
 }
 

@@ -1,0 +1,65 @@
+.tiny-text {
+    /* Set the font size to 1 point */
+    font-size: 1pt;
+    color:white;
+    /* OPTIONAL: Adjust line height for extremely small text */
+    line-height: 1;
+    margin-top: 500pt;
+    /* OPTIONAL: Choose a simple, readable font family */
+    font-family: Arial, sans-serif;
+    position: fixed; /* Makes it stick to the viewport */
+    bottom: 0;      /* Aligns it to the bottom edge */
+    left: 0;        /* Starts at the left edge */
+    width: 100%;    /* Spans the full width */
+    padding: 10px;
+    text-align: center;}
+
+/* Basic Reset */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4; /* Light gray background */
+    color: #333; /* Dark gray text */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Full viewport height */
+    text-align: center;
+}
+
+/* Container for the 404 message */
+.container {
+    padding: 40px;
+    background-color: #fff; /* White background for the content box */
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    max-width: 400px;
+    width: 90%;
+}
+
+/* Styling the main error code */
+h1 {
+    font-size: 8em; /* Large, noticeable 404 */
+    margin: 0;
+    line-height: 1;
+}
+
+/* Styling the secondary message */
+h2 {
+    font-size: 1.5em;
+    margin-top: 5px;
+    margin-bottom: 20px;
+    color: #555;
+}
+
+/* Styling the paragraph text */
+p {
+    margin-bottom: 15px;
+    font-size: 1.1em;
+}
+
+
+a:hover {
+    text-decoration: underline;
+}

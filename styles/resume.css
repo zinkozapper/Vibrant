@@ -191,3 +191,14 @@ article h3 {
     border: 1px solid #2c3440;
     border-top: none;
 }
+
+.tiny-text {
+    /* Set the font size to 1 point */
+    font-size: 1pt;
+
+    /* OPTIONAL: Adjust line height for extremely small text */
+    line-height: 1;
+
+    /* OPTIONAL: Choose a simple, readable font family */
+    font-family: Arial, sans-serif;
+}

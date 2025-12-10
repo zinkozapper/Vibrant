@@ -195,9 +195,10 @@ article h3 {
 .tiny-text {
     /* Set the font size to 1 point */
     font-size: 1pt;
-
+    color: #161e27;
     /* OPTIONAL: Adjust line height for extremely small text */
     line-height: 1;
+    text-align: right;
 
     /* OPTIONAL: Choose a simple, readable font family */
     font-family: Arial, sans-serif;

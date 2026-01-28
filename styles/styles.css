@@ -1,6 +1,5 @@
 /* Custom background color or image */
 body {
-    /* Using a background image for a dynamic look. Replace 'circuit_bg.jpg' with your file. */
     background-image: url('../images/circuit_bg.png'); 
     background-size: cover;
     background-attachment: fixed; /* Makes the background stay put when scrolling */

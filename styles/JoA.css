@@ -1,0 +1,148 @@
+:root {
+    --gold: #b8923a;
+    --burgundy: #630e0e;
+    --ink: #2b1e16;
+}
+
+* { box-sizing: border-box; }
+
+body, html {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #2c1b0e; 
+    background-image: url('https://www.transparenttextures.com/patterns/dark-wood.png');
+    overflow: hidden;
+}
+
+.full-page-container {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+}
+
+header {
+    text-align: center;
+    padding-bottom: 10px;
+    flex-shrink: 0;
+}
+
+h1 {
+    font-family: 'Uncial+Antiqua', cursive;
+    color: var(--gold);
+    font-size: 3rem;
+    margin: 0;
+    text-shadow: 2px 2px 4px black;
+}
+
+.subtitle {
+    color: #dcc9a9;
+    font-style: italic;
+    margin-top: 5px;
+}
+
+/* The Viewport allows us to see the scroll */
+.scroll-viewport {
+    flex-grow: 1;
+    overflow-x: auto;
+    overflow-y: hidden;
+    display: flex;
+    align-items: center;
+    padding: 40px 0;
+    /* Custom Scrollbar for a "Gold" look */
+    scrollbar-width: thin;
+    scrollbar-color: var(--gold) transparent;
+}
+
+.scroll-viewport::-webkit-scrollbar { height: 12px; }
+.scroll-viewport::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 10px; }
+
+/* THIS USES YOUR REQUESTED SCROLL IMAGE */
+.scroll-bg-container {
+    min-width: 3500px; /* Adjust based on how many slots you have */
+    height: 900px;
+    background-image: url('../images/parchment_roll.png');
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    display: flex;
+    align-items: center;
+    padding: 0 600px; /* Padding so items don't sit on the "rolled" edges */
+    background-color: transparent;
+    position: relative;
+    z-index: 5;
+}
+
+.timeline-track {
+    display: flex;
+    gap: 80px;
+}
+
+.timeline-item {
+    width: 280px;
+    height: 350px;
+    padding: 30px;
+    background: rgba(158, 146, 146, 0.5);
+    border: 1px solid rgba(184, 146, 58, 0.491);
+    cursor: pointer;
+    transition: all 0.4s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    /* This makes the items look like they are written on the paper */
+    mix-blend-mode: multiply; 
+}
+
+.timeline-item:hover {
+    transform: scale(1.1) translateY(-10px) rotate(1deg);
+    background: rgba(255, 255, 255, 0.2);
+    border-color: var(--burgundy);
+}
+
+.symbol { font-size: 2rem; color: var(--burgundy); }
+.date { font-family: 'Uncial+Antiqua', cursive; color: var(--burgundy); font-weight: bold; }
+h3 { font-family: 'Crimson Text', serif; color: var(--ink); margin: 10px 0; }
+p { font-size: 0.9rem; color: var(--ink); font-style: italic; }
+
+/* Modal Styling */
+.modal-overlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.8);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-overlay.active { display: flex; }
+
+.modal-box {
+    background: #f4e9d7;
+    background-image: url('https://www.transparenttextures.com/patterns/handmade-paper.png');
+    width: 90%;
+    max-width: 500px;
+    padding: 40px;
+    border: 5px double var(--gold);
+    box-shadow: 0 0 30px rgba(0,0,0,0.5);
+    text-align: center;
+}
+
+.close-btn {
+    position: absolute;
+    top: 10px; right: 20px;
+    font-size: 2rem;
+    cursor: pointer;
+    color: var(--burgundy);
+}
+
+footer {
+    text-align: center;
+    color: var(--gold);
+    padding: 10px;
+    font-size: 0.8rem;
+}

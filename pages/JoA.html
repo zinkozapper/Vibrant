@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Maid & The Manuscript</title>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,700;1,400&family=Uncial+Antiqua&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../styles/JoA.css">
+</head>
+<body>
+
+<div class="full-page-container">
+    <header>
+        <h1>Voices of Deliverance</h1>
+        <p class="subtitle">A Comparison of Joan of Arc & The Book of Mormon</p>
+    </header>
+
+    <div class="scroll-viewport">
+        <div class="scroll-bg-container">
+            <div class="timeline-track">
+                
+                <div class="timeline-item" onclick="openDetails('The First Vision', 'Joan heard the voices of saints in her garden at age 13. Similarly, Joseph Smith sought a quiet grove to ask God for wisdom. Both experienced a pillar of light and clear instruction.')">
+                    <span class="symbol">✠</span>
+                    <span class="date">The Calling</span>
+                    <h3>Divine Appointment</h3>
+                    <p>Click to Read</p>
+                </div>
+
+                <div class="timeline-item" onclick="openDetails('The Unlearned Servant', 'Joan was an illiterate farm girl who led generals. The Book of Mormon describes prophets like Nephi as unlearned youths who were magnified by the power of God.')">
+                    <span class="symbol">✠</span>
+                    <span class="date">The Humble</span>
+                    <h3>The Unlearned</h3>
+                    <p>Click to Read</p>
+                </div>
+
+                <div class="timeline-item" onclick="openDetails('The Title of Liberty', 'Joan’s banner was her most prized possession. Captain Moroni raised the Title of Liberty to remind the people of their God and their freedom.')">
+                    <span class="symbol">✠</span>
+                    <span class="date">The Standard</span>
+                    <h3>Banners of Liberty</h3>
+                    <p>Click to Read</p>
+                </div>
+
+                <div class="timeline-item" onclick="openDetails('The Sacrifice', 'Joan and Abinadi both sealed their testimonies through fire. They remained true to their heavenly visions even when faced with death.')">
+                    <span class="symbol">✠</span>
+                    <span class="date">The Martyr</span>
+                    <h3>The Refiner’s Fire</h3>
+                    <p>Click to Read</p>
+                </div>
+
+                </div>
+        </div>
+    </div>
+
+    <div id="modalOverlay" class="modal-overlay">
+        <div class="modal-box">
+            <span class="close-btn" onclick="closeDetails()">&times;</span>
+            <h2 id="modalTitle"></h2>
+            <div class="modal-divider"></div>
+            <p id="modalBody"></p>
+        </div>
+    </div>
+
+    <footer>
+        <p>✦ Use the scrollbar below to travel through the manuscript ✦</p>
+    </footer>
+</div>
+
+<script>
+    function openDetails(title, text) {
+        document.getElementById('modalTitle').innerText = title;
+        document.getElementById('modalBody').innerText = text;
+        document.getElementById('modalOverlay').classList.add('active');
+    }
+
+    function closeDetails() {
+        document.getElementById('modalOverlay').classList.remove('active');
+    }
+
+    document.getElementById('modalOverlay').addEventListener('click', function(e) {
+        if (e.target === this) closeDetails();
+    });
+</script>
+
+</body>
+</html>

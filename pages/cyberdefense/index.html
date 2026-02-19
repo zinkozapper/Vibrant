@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cyber-Shield: Tactical Defense</title>
+    <style>
+        :root {
+            --neon-green: #39ff14;
+            --neon-blue: #00f3ff;
+            --neon-red: #ff3131;
+            --bg-dark: #0a0a0c;
+        }
+
+        body {
+            margin: 0; background-color: var(--bg-dark); color: var(--neon-green);
+            font-family: 'Courier New', Courier, monospace; display: flex;
+            flex-direction: column; align-items: center; overflow: hidden;
+        }
+
+        #ui-panel {
+            width: 850px; padding: 15px; display: flex; justify-content: space-around;
+            align-items: center; background: #111; border-bottom: 2px solid var(--neon-green);
+        }
+
+        .stat { font-size: 1.1rem; text-transform: uppercase; font-weight: bold; }
+        #game-container { position: relative; margin-top: 10px; border: 2px solid var(--neon-green); }
+        canvas { display: block; background: #000; cursor: default; }
+
+        #upgrade-menu {
+            position: absolute; display: none; background: #111; border: 1px solid var(--neon-blue);
+            padding: 8px; border-radius: 4px; z-index: 50; flex-direction: column; gap: 8px;
+            pointer-events: auto; transform: translate(-50%, -125%); min-width: 140px;
+        }
+        .menu-row { display: flex; gap: 5px; }
+        .up-btn {
+            flex: 2; background: var(--neon-blue); color: #000; border: none; font-weight: bold;
+            padding: 8px; cursor: pointer; font-family: inherit; font-size: 0.75rem;
+        }
+        .sell-btn {
+            flex: 1; background: var(--neon-red); color: #fff; border: none; font-weight: bold;
+            padding: 8px; cursor: pointer; font-family: inherit; font-size: 0.75rem;
+        }
+        .up-btn.locked { background: #444; color: #888; cursor: not-allowed; }
+        .close-btn { background: #333; color: #888; border: none; font-size: 0.6rem; cursor: pointer; padding: 2px; }
+
+        #shop-container { margin-top: 10px; text-align: center; position: relative; }
+        #shop { display: flex; gap: 10px; padding: 10px; }
+
+        .tower-btn {
+            padding: 12px; border: 2px solid var(--neon-blue); background: transparent;
+            color: var(--neon-blue); cursor: grab; font-weight: bold; width: 170px;
+            display: flex; flex-direction: column; align-items: center; position: relative;
+        }
+        .tower-btn:hover { background: rgba(0, 243, 255, 0.1); }
+
+        .tooltip {
+            visibility: hidden; position: absolute; bottom: 110%; left: 50%;
+            transform: translateX(-50%); background: #000; color: var(--neon-blue);
+            border: 1px solid var(--neon-blue); padding: 8px; width: 200px;
+            font-size: 0.75rem; z-index: 100; pointer-events: none; text-align: left;
+            box-shadow: 0 0 10px rgba(0, 243, 255, 0.3);
+        }
+        .tower-btn:hover .tooltip { visibility: visible; }
+
+        #next-wave-btn {
+            padding: 10px 20px; background: var(--neon-green); color: #000;
+            border: none; cursor: pointer; font-family: inherit; font-weight: bold;
+            min-width: 180px; text-transform: uppercase;
+        }
+        #next-wave-btn:disabled { background: #222; color: #555; cursor: not-allowed; border: 1px solid #444; }
+
+        #modal-overlay {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85); z-index: 100; flex-direction: column;
+            justify-content: center; align-items: center;
+        }
+        #modal-content { border: 2px solid var(--neon-green); padding: 40px; background: #000; text-align: center; }
+        .modal-btn { padding: 10px 20px; cursor: pointer; font-family: inherit; font-weight: bold; margin: 10px; background: var(--neon-green); color: #000; border: none; }
+    </style>
+</head>
+<body>
+
+<div id="modal-overlay">
+    <div id="modal-content">
+        <h1 id="modal-title">SYSTEM SECURED</h1>
+        <p id="modal-msg">Wave 5 Defeated. Continue to Endless Mode?</p>
+        <button class="modal-btn" onclick="location.reload()">RESTART</button>
+        <button id="endless-btn" class="modal-btn" onclick="startEndless()">ENDLESS MODE</button>
+    </div>
+</div>
+
+<div id="ui-panel">
+    <div class="stat">Credits: $<span id="credits">650</span></div>
+    <div class="stat">Integrity: <span id="health">100</span>%</div>
+    <div class="stat">Round: <span id="round">1</span><span id="endless-tag"></span></div>
+    <div class="stat">Next Wave: <span id="countdown">60</span>s</div>
+    <button id="next-wave-btn" onclick="manualTrigger()">FORCE NEXT WAVE</button>
+</div>
+
+<div id="game-container">
+    <div id="upgrade-menu">
+        <span id="up-title" style="font-size: 0.7rem; color: var(--neon-blue); text-align: center;">UNIT OPTIONS</span>
+        <div class="menu-row">
+            <button id="confirm-up" class="up-btn">UPGRADE ($200)</button>
+            <button id="confirm-sell" class="sell-btn">SELL</button>
+        </div>
+        <button class="close-btn" onclick="closeUpgradeMenu()">CLOSE</button>
+    </div>
+    <canvas id="gameCanvas" width="850" height="500"></canvas>
+</div>
+
+<div id="shop-container">
+    <div id="shop">
+        <button class="tower-btn" draggable="true" ondragstart="drag(event, 'FIREWALL')">
+            <span>[#] FIREWALL ($200)</span>
+            <div class="tooltip"><b>FIREWALL</b><br>Continuous laser damage. Melts HP over time.<br><i>Type: DPS</i></div>
+        </button>
+        <button class="tower-btn" draggable="true" ondragstart="drag(event, 'ANTIVIRUS')">
+            <span>[A] ANTIVIRUS ($350)</span>
+            <div class="tooltip"><b>ANTIVIRUS</b><br>High-power bursts. Slower but deadly.<br><i>Type: BURST</i></div>
+        </button>
+        <button class="tower-btn" draggable="true" ondragstart="drag(event, 'VPN')">
+            <span>[V] VPN ($300)</span>
+            <div class="tooltip"><b>VPN</b><br>Reroutes packets. Upgrades lower cooldown.<br><i>Type: UTILITY</i></div>
+        </button>
+        <button class="tower-btn" draggable="true" ondragstart="drag(event, 'ENCRYPTION')">
+            <span>[E] ENCRYPTION ($250)</span>
+            <div class="tooltip"><b>ENCRYPTION</b><br>Slows units. Upgrades increase slow power.<br><i>Type: SUPPORT</i></div>
+        </button>
+    </div>
+</div>
+
+<script>
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+    const creditsEl = document.getElementById('credits');
+    const healthEl = document.getElementById('health');
+    const roundEl = document.getElementById('round');
+    const countdownEl = document.getElementById('countdown');
+    const nextWaveBtn = document.getElementById('next-wave-btn');
+    const modal = document.getElementById('modal-overlay');
+    const upMenu = document.getElementById('upgrade-menu');
+    const upBtn = document.getElementById('confirm-up');
+    const sellBtn = document.getElementById('confirm-sell');
+
+    let credits = 650;
+    let health = 100;
+    let round = 1;
+    let countdown = 60;
+    let gameActive = true;
+    let waveState = "IDLE"; 
+    let isEndless = false;
+    let towers = [];
+    let enemies = [];
+    let activeTower = null;
+    
+    let baseHP = 100;
+    let baseCount = 10;
+
+    const path = [{x: 0, y: 100}, {x: 650, y: 100}, {x: 650, y: 250}, {x: 150, y: 250}, {x: 150, y: 400}, {x: 850, y: 400}];
+
+    const TOWER_TYPES = {
+        'FIREWALL': { icon: '#', color: '#ff3131', range: 60, type: 'dps', power: 1.2, cost: 200 },
+        'ANTIVIRUS': { icon: 'A', color: '#39ff14', range: 85, type: 'burst', power: 120, cooldown: 50, cost: 350 },
+        'VPN': { icon: 'V', color: '#00f3ff', range: 75, type: 'reroute', chance: 0.15, cooldown: 180, cost: 300 },
+        'ENCRYPTION': { icon: 'E', color: '#bc13fe', range: 95, type: 'scramble', power: 0.6, vuln: 1.5, cost: 250 }
+    };
+
+    function drag(ev, type) { ev.dataTransfer.setData("type", type); }
+
+    canvas.ondragover = (e) => e.preventDefault();
+    canvas.ondrop = (e) => {
+        e.preventDefault();
+        const rect = canvas.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        const type = e.dataTransfer.getData("type");
+        if (isOnTrack(x, y) && credits >= TOWER_TYPES[type].cost) {
+            credits -= TOWER_TYPES[type].cost;
+            updateUI();
+            towers.push({ 
+                x, y, ...TOWER_TYPES[type], 
+                level: 1, 
+                upCost: Math.floor(TOWER_TYPES[type].cost * 0.75),
+                spent: TOWER_TYPES[type].cost,
+                currentCooldown: 0 
+            });
+        }
+    };
+
+    canvas.addEventListener('mousedown', (e) => {
+        const rect = canvas.getBoundingClientRect();
+        const mouseX = e.clientX - rect.left;
+        const mouseY = e.clientY - rect.top;
+        activeTower = towers.find(t => Math.hypot(t.x - mouseX, t.y - mouseY) < 25);
+        if (activeTower) {
+            upMenu.style.display = 'flex';
+            upMenu.style.left = activeTower.x + "px";
+            upMenu.style.top = activeTower.y + "px";
+            updateUpgradeButton();
+        } else { closeUpgradeMenu(); }
+    });
+
+    function updateUpgradeButton() {
+        if (!activeTower) return;
+        upBtn.innerText = `UP Lvl.${activeTower.level+1} ($${activeTower.upCost})`;
+        sellBtn.innerText = `SELL ($${Math.floor(activeTower.spent * 0.5)})`;
+        credits < activeTower.upCost ? upBtn.classList.add('locked') : upBtn.classList.remove('locked');
+    }
+
+    upBtn.onclick = () => {
+        if (activeTower && credits >= activeTower.upCost) {
+            credits -= activeTower.upCost;
+            activeTower.spent += activeTower.upCost;
+            activeTower.level++;
+            
+            // Logic Scaling
+            activeTower.range *= 1.1; 
+
+            if (activeTower.type === 'scramble') {
+                activeTower.power *= 0.8; // Stronger slow (lower speed multiplier)
+            } else if (activeTower.type === 'reroute') {
+                activeTower.cooldown = Math.max(30, activeTower.cooldown * 0.85); // Faster cooldown
+            } else if (activeTower.type === 'burst') {
+                activeTower.power *= 1.4;
+            } else {
+                activeTower.power *= 1.3;
+            }
+
+            activeTower.upCost = Math.floor(activeTower.upCost * 1.6);
+            updateUI();
+            updateUpgradeButton();
+        }
+    };
+
+    sellBtn.onclick = () => {
+        if (activeTower) {
+            credits += Math.floor(activeTower.spent * 0.5);
+            towers = towers.filter(t => t !== activeTower);
+            closeUpgradeMenu();
+            updateUI();
+        }
+    };
+
+    function closeUpgradeMenu() { upMenu.style.display = 'none'; activeTower = null; }
+
+    function updateUI() {
+        creditsEl.innerText = credits;
+        healthEl.innerText = Math.max(0, health);
+        roundEl.innerText = round;
+    }
+
+    function isOnTrack(x, y) {
+        for (let i = 0; i < path.length - 1; i++) {
+            const d = distToSegment({x, y}, path[i], path[i+1]);
+            if (d < 35) return true;
+        }
+        return false;
+    }
+
+    function distToSegment(p, v, w) {
+        const l2 = (v.x - w.x)**2 + (v.y - w.y)**2;
+        if (l2 == 0) return Math.sqrt((p.x - v.x)**2 + (p.y - v.y)**2);
+        let t = Math.max(0, Math.min(1, ((p.x - v.x) * (w.x - v.x) + (p.y - v.y) * (w.y - v.y)) / l2));
+        return Math.sqrt((p.x - (v.x + t * (w.x - v.x)))**2 + (p.y - (v.y + t * (w.y - v.y)))**2);
+    }
+
+    class Enemy {
+        constructor(hp, speed, isBoss) {
+            this.hp = hp; this.maxHp = hp; this.speed = speed; this.baseSpeed = speed;
+            this.pathIndex = 0; this.x = path[0].x; this.y = path[0].y;
+            this.isBoss = isBoss; this.vuln = 1; this.currentSlow = 1;
+            this.active = true;
+        }
+        update() {
+            if(!this.active) return;
+            let target = path[this.pathIndex + 1];
+            if (!target) return;
+            let dx = target.x - this.x; let dy = target.y - this.y;
+            let d = Math.sqrt(dx*dx + dy*dy);
+            if (d < 5) {
+                this.pathIndex++;
+                if (this.pathIndex >= path.length - 1) {
+                    health -= this.isBoss ? 100 : 10;
+                    updateUI();
+                    this.hp = 0; this.active = false; return;
+                }
+            }
+            let s = this.isBoss ? this.baseSpeed : this.baseSpeed * this.currentSlow;
+            this.x += (dx/d) * s; this.y += (dy/d) * s;
+            this.currentSlow = 1; this.vuln = 1;
+            if(this.hp <= 0) this.active = false;
+        }
+        draw() {
+            if(!this.active) return;
+            ctx.fillStyle = this.isBoss ? "#fff" : "#ff3131";
+            ctx.beginPath(); ctx.arc(this.x, this.y, this.isBoss ? 35 : 12, 0, Math.PI*2); ctx.fill();
+            ctx.fillStyle = "#222"; ctx.fillRect(this.x-15, this.y-25, 30, 4);
+            ctx.fillStyle = "#39ff14"; ctx.fillRect(this.x-15, this.y-25, (this.hp/this.maxHp)*30, 4);
+        }
+    }
+
+    function manualTrigger() {
+        if (waveState !== "IDLE") return;
+        credits += Math.floor(countdown * 2);
+        updateUI();
+        countdown = 0;
+        beginWaveLogic();
+    }
+
+    function beginWaveLogic() {
+        if (waveState !== "IDLE") return;
+        waveState = "SPAWNING";
+        nextWaveBtn.disabled = true;
+        let hp = baseHP * Math.pow(1.5, round - 1);
+        let count = baseCount + (round * 2);
+        let speed = 1.6 + (round * 0.05);
+        let boss = (round % 5 === 0);
+        if (boss) { hp *= (isEndless ? 25 : 18); count = 1; speed = 0.8; }
+        let s = 0;
+        let inv = setInterval(() => {
+            if (!gameActive) { clearInterval(inv); return; }
+            enemies.push(new Enemy(hp, speed, boss));
+            s++; 
+            if(s >= count) { clearInterval(inv); waveState = "COMBAT"; }
+        }, 800);
+    }
+
+    function startEndless() {
+        modal.style.display = 'none';
+        isEndless = true; gameActive = true; 
+        waveState = "IDLE"; enemies = []; round++;
+        updateUI();
+        document.getElementById('endless-tag').innerText = " (ENDLESS)";
+        countdown = 15;
+        nextWaveBtn.disabled = false;
+        requestAnimationFrame(gameLoop);
+    }
+
+    function gameLoop() {
+        if(!gameActive) return;
+        ctx.fillStyle = "#000"; ctx.fillRect(0,0,850,500);
+        ctx.strokeStyle = "rgba(0, 243, 255, 0.15)"; ctx.lineWidth = 60; ctx.lineJoin = 'round'; ctx.lineCap = 'round';
+        ctx.beginPath(); ctx.moveTo(path[0].x, path[0].y);
+        for(let p of path) ctx.lineTo(p.x, p.y); ctx.stroke();
+        ctx.fillStyle = "#00f3ff"; ctx.fillRect(780, 370, 60, 60);
+
+        towers.forEach(t => {
+            if (activeTower === t) {
+                ctx.beginPath(); ctx.arc(t.x, t.y, t.range, 0, Math.PI*2);
+                ctx.strokeStyle = "rgba(0, 243, 255, 0.3)"; ctx.stroke();
+            }
+            ctx.fillStyle = t.color; ctx.fillRect(t.x-15, t.y-15, 30, 30);
+            ctx.fillStyle = "#000"; ctx.font = "bold 14px Courier"; ctx.fillText(t.icon, t.x-5, t.y+5);
+            ctx.fillStyle = "#fff"; ctx.font = "10px Arial"; ctx.fillText("v." + t.level, t.x-12, t.y+25);
+
+            enemies.forEach(e => {
+                if(!e.active) return;
+                let d = Math.sqrt((t.x-e.x)**2 + (t.y-e.y)**2);
+                if (d < t.range) {
+                    ctx.strokeStyle = t.color; ctx.lineWidth = 1 + (t.level * 0.3);
+                    ctx.beginPath(); ctx.moveTo(t.x, t.y); ctx.lineTo(e.x, e.y); ctx.stroke();
+                    if (t.type === 'scramble') { if (t.power < e.currentSlow) e.currentSlow = t.power; e.vuln = t.vuln; }
+                    if (t.type === 'dps') e.hp -= (t.power * e.vuln);
+                    if (t.type === 'reroute' && t.currentCooldown <= 0) {
+                        if (Math.random() < t.chance) { 
+                            if (e.pathIndex > 0) { e.pathIndex--; e.x = path[e.pathIndex].x; e.y = path[e.pathIndex].y; }
+                            else { e.x = path[0].x; e.y = path[0].y; }
+                            t.currentCooldown = t.cooldown; 
+                        }
+                    }
+                    if (t.type === 'burst' && t.currentCooldown <= 0) { e.hp -= (t.power * e.vuln); t.currentCooldown = t.cooldown; }
+                }
+            });
+            if(t.currentCooldown > 0) t.currentCooldown--;
+        });
+
+        for (let i = enemies.length - 1; i >= 0; i--) {
+            enemies[i].update();
+            enemies[i].draw();
+            if (!enemies[i].active) {
+                if (enemies[i].hp <= 0) { credits += (enemies[i].isBoss ? 500 : 25); updateUI(); }
+                enemies.splice(i, 1);
+            }
+        }
+
+        if(waveState === "COMBAT" && enemies.length === 0) {
+            waveState = "IDLE";
+            if(round === 5 && !isEndless) { gameActive = false; modal.style.display = 'flex'; } 
+            else { round++; updateUI(); countdown = isEndless ? 20 : 30; }
+        }
+        nextWaveBtn.disabled = (waveState !== "IDLE");
+        if(health <= 0) {
+            gameActive = false;
+            document.getElementById('modal-title').innerText = "SYSTEM BREACHED";
+            document.getElementById('modal-msg').innerText = "Final Round Reached: " + round;
+            document.getElementById('endless-btn').style.display = 'none';
+            modal.style.display = 'flex';
+        }
+        if (gameActive) requestAnimationFrame(gameLoop);
+    }
+
+    setInterval(() => {
+        if(gameActive) {
+            if(countdown > 0) { countdown--; countdownEl.innerText = countdown; } 
+            else { if (waveState === "IDLE") beginWaveLogic(); }
+            updateUpgradeButton();
+        }
+    }, 1000);
+
+    gameLoop();
+</script>
+</body>
+</html>

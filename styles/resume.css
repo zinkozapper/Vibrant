@@ -132,7 +132,7 @@ article h3 {
 /* Show content when the checkbox is checked (pure CSS magic) */
 .dropdown-toggle:checked + .dropdown-label + .dropdown-content {
     /* Set a large enough max-height to display the full content */
-    max-height: 1000px; /* Adjust as needed for very long content */
+    max-height: 10000px; /* Adjust as needed for very long content */
     padding: 20px 15px;
     border: 1px solid #1f2833;
     border-top: none;
